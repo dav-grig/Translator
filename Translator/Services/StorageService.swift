@@ -18,11 +18,11 @@ class StorageService: StorageServiceProtocol {
     private let coreData = CoreDataStore.instance
     
     func create(item: TranslationItem, completion: (TranslationError?) -> Void) {
-        coreData.create(translationItem: item, completion: completion)
+        return coreData.create(translationItem: item, completion: completion)
     }
     
     func deleteAll(completion: (TranslationError?) -> Void) {
-        coreData.deleteAll(completion: completion)
+        return coreData.deleteAll(completion: completion)
     }
     
     func fetch(completion: @escaping ([TranslationItem]?, TranslationError?) -> Void) {

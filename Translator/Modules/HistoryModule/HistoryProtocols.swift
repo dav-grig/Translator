@@ -14,7 +14,7 @@ protocol HistoryViewProtocol: class {
 
 protocol HistoryInteractorProtocol {
     func items(isFiltered: Bool) -> [TranslationItem]
-    func getAllItems()
+    func fetchAllItems()
     func clearList(completion: () -> Void)
     func filterFor(searchText: String)
 }

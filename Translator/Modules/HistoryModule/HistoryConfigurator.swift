@@ -12,10 +12,10 @@ class HistoryConfigurator: ConfiguratorProtocol {
     
     func configure(with viewController: HistoryViewController) {
         
-        let storage = StorageService()
+        let historyService = HistoryService()
         
         let presenter = HistoryPresenter(view: viewController)
-        let interactor = HistoryInteractor(presenter: presenter, storageService: storage)
+        let interactor = HistoryInteractor(presenter: presenter, historyService: historyService)
         let router = HistoryRouter(viewController: viewController)
         
         viewController.presenter = presenter

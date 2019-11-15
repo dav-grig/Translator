@@ -23,7 +23,7 @@ class HistoryPresenter: HistoryPresenterProtocol {
     }
     
     func configureView() {
-        interactor.getAllItems()
+        interactor.fetchAllItems()
     }
     
     func updateItems() {

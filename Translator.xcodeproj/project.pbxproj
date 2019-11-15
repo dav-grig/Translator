@@ -41,6 +41,7 @@
 		FEDBE607237DA20900A9DC82 /* HistoryPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDBE606237DA20900A9DC82 /* HistoryPresenter.swift */; };
 		FEDBE609237DA21800A9DC82 /* HistoryConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDBE608237DA21800A9DC82 /* HistoryConfigurator.swift */; };
 		FEDBE60B237DA7C400A9DC82 /* HistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDBE60A237DA7C400A9DC82 /* HistoryTableViewCell.swift */; };
+		FEDBE60D237EB68300A9DC82 /* HistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDBE60C237EB68300A9DC82 /* HistoryService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +93,7 @@
 		FEDBE606237DA20900A9DC82 /* HistoryPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPresenter.swift; sourceTree = "<group>"; };
 		FEDBE608237DA21800A9DC82 /* HistoryConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryConfigurator.swift; sourceTree = "<group>"; };
 		FEDBE60A237DA7C400A9DC82 /* HistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableViewCell.swift; sourceTree = "<group>"; };
+		FEDBE60C237EB68300A9DC82 /* HistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +171,7 @@
 			children = (
 				FEA9CB96237D487400274883 /* CoreDataStore.swift */,
 				FEA9CB98237D54DE00274883 /* StorageService.swift */,
+				FEDBE60C237EB68300A9DC82 /* HistoryService.swift */,
 				FEA9CB9A237D564000274883 /* NetworkService.swift */,
 			);
 			path = Services;
@@ -371,6 +374,7 @@
 				FEA9CBB5237D6FE600274883 /* SelectConfigurator.swift in Sources */,
 				FEA9CB99237D54DE00274883 /* StorageService.swift in Sources */,
 				FEDBE607237DA20900A9DC82 /* HistoryPresenter.swift in Sources */,
+				FEDBE60D237EB68300A9DC82 /* HistoryService.swift in Sources */,
 				FEA9CBA1237D5CA600274883 /* TranslationError.swift in Sources */,
 				FEA9CBBA237D764500274883 /* TraslationViewController.swift in Sources */,
 				FEA9CBB1237D6EE600274883 /* SelectPresenter.swift in Sources */,

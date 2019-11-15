@@ -11,58 +11,39 @@ import Foundation
 class HistoryInteractor: HistoryInteractorProtocol {
     
     weak var presenter: HistoryPresenterProtocol!
-    let storageService: StorageServiceProtocol
+    let historyService: HistoryServiceProtocol
     
-    private var items = [TranslationItem]()
-    private var filteredItems = [TranslationItem]()
-    
-    init(presenter: HistoryPresenterProtocol, storageService: StorageServiceProtocol) {
+    init(presenter: HistoryPresenterProtocol, historyService: HistoryServiceProtocol) {
         self.presenter = presenter
-        self.storageService = storageService
+        self.historyService = historyService
     }
     
     func clearList(completion: () -> Void) {
-        storageService.deleteAll(completion: { [weak self] (error) in
+        historyService.deleteAll(completion: { [weak self] (error) in
             if let error = error {
                 self?.presenter.showAlertView(with: error.localizedDescription)
                 completion()
                 return
             }
-            self?.removeCache()
             completion()
         })
     }
     
-    func getAllItems() {
-        storageService.fetch(completion: { [weak self] (result, error) in
+    func fetchAllItems() {
+        historyService.fetch(completion: { [weak self] (error) in
             if let error = error {
                 self?.presenter.showAlertView(with: error.localizedDescription)
                 return
             }
-            if let result = result, !result.isEmpty {
-                self?.items = result
-                self?.presenter.updateItems()
-            }
+            self?.presenter.updateItems()
         })
     }
     
     func filterFor(searchText: String) {
-        filteredItems = items.filter({ (item: TranslationItem) -> Bool in
-            if item.translationExpression.lowercased().contains(searchText.lowercased()) || item.translationResult.lowercased().contains(searchText.lowercased()) {
-                return true
-            }
-            return false
-        })
+        historyService.filterFor(searchText: searchText)
     }
     
     func items(isFiltered: Bool) -> [TranslationItem] {
-        return isFiltered ? filteredItems : items
-    }
-    
-    // MARK: - Private
-    
-    private func removeCache() {
-        items.removeAll()
-        filteredItems.removeAll()
+        return historyService.items(isFiltered: isFiltered)
     }
 }

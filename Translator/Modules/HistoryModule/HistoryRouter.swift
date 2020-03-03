@@ -9,17 +9,18 @@
 import Foundation
 import UIKit
 
-class HistoryRouter: HistoryRouterProtocol {
-    weak var viewController: HistoryViewController!
+final class HistoryRouter: HistoryRouterProtocol {
+    weak var viewController: HistoryViewController?
     
     init(viewController: HistoryViewController) {
         self.viewController = viewController
     }
     
     func show(item: TranslationItem) {
-        if let translationController = viewController.tabBarController?.viewControllers?[0] as? TranslationViewProtocol {
-            translationController.presenter.set(item: item)
-            viewController.tabBarController?.selectedIndex = 0
+        if let translationController = viewController?.tabBarController?.viewControllers?[0] as? TranslationViewProtocol {
+            
+            translationController.presenter?.set(item: item)
+            viewController?.tabBarController?.selectedIndex = 0
         }
     }
     
@@ -27,7 +28,8 @@ class HistoryRouter: HistoryRouterProtocol {
         DispatchQueue.main.async {
             let alertController = UIAlertController(title: "", message: text, preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: "OK", style: .default) { (action: UIAlertAction) in })
-            self.viewController.present(alertController, animated: true, completion: nil)
+            
+            self.viewController?.present(alertController, animated: true, completion: nil)
         }
     }
 }

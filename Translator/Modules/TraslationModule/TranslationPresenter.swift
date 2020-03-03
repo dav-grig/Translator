@@ -8,62 +8,73 @@
 
 import Foundation
 
-class TranslationPresenter: TranslationPresenterProtocol, LanguageSetterProtocol {
+final class TranslationPresenter: TranslationPresenterProtocol, LanguageSetterProtocol {
     
-    weak var view: TranslationViewProtocol!
-    var interactor: TranslationInteractorProtocol!
-    var router: TranslationRouterProtocol!
+    weak var view: TranslationViewProtocol?
+    var interactor: TranslationInteractorProtocol?
+    var router: TranslationRouterProtocol?
     
     init(view: TranslationViewProtocol) {
         self.view = view
     }
     
-    var fromLanguageTitle: String {
-        return interactor.fromLanguage.description
+    var fromLanguageTitle: String? {
+        return interactor?.fromLanguage.description
     }
     
-    var toLanguageTitle: String {
-        return interactor.toLanguage.description
+    var toLanguageTitle: String? {
+        return interactor?.toLanguage.description
     }
     
     func itemsListHasBeenUpdated() {
-        router.updateHistoryList()
+        router?.updateHistoryList()
     }
     
     func updateTranslationResult() {
-        guard let translationResult = interactor.translationResult,
+        guard let view = view,
+            let interactor = interactor,
+            let translationResult = interactor.translationResult,
             let translationExpression = interactor.expression else { return }
         
-        view.show(item: TranslationItem(translationExpression: translationExpression, translationResult: translationResult, fromLanguage: interactor.fromLanguage, toLanguage: interactor.toLanguage))
+        let translationItem = TranslationItem(translationExpression: translationExpression,
+                                              translationResult: translationResult,
+                                              fromLanguage: interactor.fromLanguage,
+                                              toLanguage: interactor.toLanguage)
+        
+        view.show(item: translationItem)
     }
     
     func setExpression(_ value: String) {
-        interactor.expression = value
+        interactor?.expression = value
     }
     
     func swapButtonTouched() {
-        interactor.swap()
-        view.updateButtons()
+        interactor?.swap()
+        view?.updateButtons()
     }
     
     func fromButtonTouched() {
-        router.showSelectLanguageView(SelectedLanguage(value: interactor.fromLanguage, type: .from))
+        guard let interactor = interactor else { return }
+        
+        router?.showSelectLanguageView(SelectedLanguage(value: interactor.fromLanguage, type: .from))
     }
     
     func toButtonTouched() {
-        router.showSelectLanguageView(SelectedLanguage(value: interactor.toLanguage, type: .to))
+        guard let interactor = interactor else { return }
+
+        router?.showSelectLanguageView(SelectedLanguage(value: interactor.toLanguage, type: .to))
     }
     
     func set(item: TranslationItem) {
-        interactor.set(item: item)
+        interactor?.set(item: item)
     }
     
     func set(language: SelectedLanguage) {
-        interactor.set(language: language)
-        view.updateButtons()
+        interactor?.set(language: language)
+        view?.updateButtons()
     }
     
     func showAlertView(with text: String) {
-        router.showAlertView(with: text)
+        router?.showAlertView(with: text)
     }
 }

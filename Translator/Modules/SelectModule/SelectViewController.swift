@@ -8,11 +8,11 @@
 
 import UIKit
 
-class SelectViewController: UITableViewController, SelectViewProtocol {
+final class SelectViewController: UITableViewController, SelectViewProtocol {
 
     typealias ConfiguratorProtocol = SelectConfigurator
 
-    var presenter: SelectPresenterProtocol!
+    var presenter: SelectPresenterProtocol?
     var configurator: ConfiguratorProtocol = SelectConfigurator()
 
     let languages: [Language] = Language.allCases
@@ -20,7 +20,7 @@ class SelectViewController: UITableViewController, SelectViewProtocol {
     private let cellReuseId = "selectedCellReuseId"
 
     @IBAction func closeButtonTouched(_ sender: Any) {
-        presenter.closeButtonTouched()
+        presenter?.closeButtonTouched()
     }
 
     // MARK: - Table View
@@ -40,7 +40,7 @@ class SelectViewController: UITableViewController, SelectViewProtocol {
         tableView.deselectRow(at: indexPath, animated: true)
 
         let language = languages[indexPath.row]
-        presenter.choose(language: language)
+        presenter?.choose(language: language)
     }
     
     // MARK: - Private

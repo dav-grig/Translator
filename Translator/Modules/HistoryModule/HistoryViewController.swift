@@ -8,10 +8,10 @@
 
 import UIKit
 
-class HistoryViewController: UITableViewController, HistoryViewProtocol {
+final class HistoryViewController: UITableViewController, HistoryViewProtocol {
     typealias ConfiguratorProtocol = HistoryConfigurator
     
-    var presenter: HistoryPresenterProtocol!
+    var presenter: HistoryPresenterProtocol?
     var configurator: ConfiguratorProtocol = HistoryConfigurator()
     
     private let searchController = UISearchController(searchResultsController: nil)
@@ -34,7 +34,7 @@ class HistoryViewController: UITableViewController, HistoryViewProtocol {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        presenter.configureView()
+        presenter?.configureView()
     }
     
     func updateItems() {
@@ -42,31 +42,39 @@ class HistoryViewController: UITableViewController, HistoryViewProtocol {
     }
     
     @IBAction func clearButtonTouched(_ sender: Any) {
-        presenter.clearButtonTouched()
+        presenter?.clearButtonTouched()
     }
     
     // MARK: - Table View
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter.items(isFiltered: isFiltering).count
+        guard let count = presenter?.items(isFiltered: isFiltering).count else {
+            fatalError("table view number of rows at \(section) section wasn't set for a HistoryViewController")
+        }
+        return count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: HistoryTableViewCell.reuseId, for: indexPath) as! HistoryTableViewCell
-        let item = presenter.items(isFiltered: isFiltering)[indexPath.row]
-        configureCell(cell, with: item)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: HistoryTableViewCell.reuseId, for: indexPath) as? HistoryTableViewCell else {
+            fatalError("table view cell at \(indexPath.row) row wasn't set for a HistoryViewController")
+        }
+        let item = presenter?.items(isFiltered: isFiltering)[indexPath.row]
+        configure(cell: cell, with: item)
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        presenter.didSelect(item: presenter.items(isFiltered: isFiltering)[indexPath.row])
+        guard let presenter = presenter else { return }
+        
+        let item = presenter.items(isFiltered: isFiltering)[indexPath.row]
+        presenter.didSelect(item: item)
     }
     
     // MARK: - Private
     
-    private func configureCell(_ cell: HistoryTableViewCell, with item: TranslationItem) {
+    private func configure(cell: HistoryTableViewCell, with item: TranslationItem?) {
         cell.item = item
     }
     
@@ -90,7 +98,7 @@ extension HistoryViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text else { return }
-        presenter.filterFor(searchText: text)
+        presenter?.filterFor(searchText: text)
         
         updateItems()
     }

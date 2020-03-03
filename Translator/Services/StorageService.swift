@@ -14,7 +14,7 @@ protocol StorageServiceProtocol {
     func fetch(completion: @escaping ([TranslationItem]?, TranslationError?) -> Void)
 }
 
-class StorageService: StorageServiceProtocol {
+final class StorageService: StorageServiceProtocol {
     private let coreData = CoreDataStore.instance
     
     func create(item: TranslationItem, completion: (TranslationError?) -> Void) {

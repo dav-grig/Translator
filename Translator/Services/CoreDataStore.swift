@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class CoreDataStore {
+final class CoreDataStore {
     
     static let instance = CoreDataStore()
     
@@ -64,7 +64,7 @@ class CoreDataStore {
         let context = persistentContainer.viewContext
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: translationItemEntity)
         do {
-             let fetchedResult = try context.fetch(request)
+            let fetchedResult = try context.fetch(request)
             guard let result = fetchedResult as? [ManagedTranslationItem] else {
                 completion(nil, TranslationError.databaseError(fetchesErrorText))
                 return
@@ -95,7 +95,10 @@ extension ManagedTranslationItem {
             let to = Language(rawValue: toLanguage) else {
                 return nil
         }
-        return TranslationItem(translationExpression: translationExpression, translationResult: translationResult, fromLanguage: from, toLanguage: to)
+        return TranslationItem(translationExpression: translationExpression,
+                               translationResult: translationResult,
+                               fromLanguage: from,
+                               toLanguage: to)
     }
     
     func from(translationItem: TranslationItem) {

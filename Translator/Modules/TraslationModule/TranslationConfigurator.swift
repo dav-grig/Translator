@@ -8,7 +8,7 @@
 
 import Foundation
 
-class TranslationConfigurator: ConfiguratorProtocol {
+final class TranslationConfigurator: ConfiguratorProtocol {
     func configure(with viewController: TranslationViewController) {
         
         let network = NetworkService()

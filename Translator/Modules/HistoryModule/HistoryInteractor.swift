@@ -8,9 +8,9 @@
 
 import Foundation
 
-class HistoryInteractor: HistoryInteractorProtocol {
+final class HistoryInteractor: HistoryInteractorProtocol {
     
-    weak var presenter: HistoryPresenterProtocol!
+    weak var presenter: HistoryPresenterProtocol?
     let historyService: HistoryServiceProtocol
     
     init(presenter: HistoryPresenterProtocol, historyService: HistoryServiceProtocol) {
@@ -21,7 +21,7 @@ class HistoryInteractor: HistoryInteractorProtocol {
     func clearList(completion: () -> Void) {
         historyService.deleteAll(completion: { [weak self] (error) in
             if let error = error {
-                self?.presenter.showAlertView(with: error.localizedDescription)
+                self?.presenter?.showAlertView(with: error.localizedDescription)
                 completion()
                 return
             }
@@ -32,10 +32,10 @@ class HistoryInteractor: HistoryInteractorProtocol {
     func fetchAllItems() {
         historyService.fetch(completion: { [weak self] (error) in
             if let error = error {
-                self?.presenter.showAlertView(with: error.localizedDescription)
+                self?.presenter?.showAlertView(with: error.localizedDescription)
                 return
             }
-            self?.presenter.updateItems()
+            self?.presenter?.updateItems()
         })
     }
     

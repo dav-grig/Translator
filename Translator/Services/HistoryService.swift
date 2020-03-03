@@ -16,7 +16,7 @@ protocol HistoryServiceProtocol {
     func items(isFiltered: Bool) -> [TranslationItem]
 }
 
-class HistoryService: HistoryServiceProtocol {
+final class HistoryService: HistoryServiceProtocol {
     
     private let storageService: StorageServiceProtocol = StorageService()
     private var items = [TranslationItem]()
@@ -36,12 +36,12 @@ class HistoryService: HistoryServiceProtocol {
     }
     
     func fetch(completion: @escaping (TranslationError?) -> Void) {
-        storageService.fetch(completion: { [weak self] (result, error) in
+        storageService.fetch { [weak self] (result, error) in
             if let result = result, error == nil {
                 self?.items = result
             }
             completion(error)
-        })
+        }
     }
     
     func items(isFiltered: Bool) -> [TranslationItem] {
@@ -49,12 +49,12 @@ class HistoryService: HistoryServiceProtocol {
     }
     
     func filterFor(searchText: String) {
-        filteredItems = items.filter({ (item: TranslationItem) -> Bool in
+        filteredItems = items.filter { (item: TranslationItem) -> Bool in
             if item.translationExpression.lowercased().contains(searchText.lowercased()) || item.translationResult.lowercased().contains(searchText.lowercased()) {
                 return true
             }
             return false
-        })
+        }
     }
     
     // MARK: - Private

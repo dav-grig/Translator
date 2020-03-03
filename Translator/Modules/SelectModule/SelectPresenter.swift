@@ -8,11 +8,11 @@
 
 import Foundation
 
-class SelectPresenter: SelectPresenterProtocol {
+final class SelectPresenter: SelectPresenterProtocol {
     
-    weak var view: SelectViewProtocol!
-    var interactor: SelectInteractorProtocol!
-    var router: SelectRouterProtocol!
+    weak var view: SelectViewProtocol?
+    var interactor: SelectInteractorProtocol?
+    var router: SelectRouterProtocol?
     
     var selectedLanguage: SelectedLanguage?
     
@@ -25,12 +25,12 @@ class SelectPresenter: SelectPresenterProtocol {
     func choose(language: Language) {
         if var selectedLanguage = selectedLanguage {
             selectedLanguage.value = language
-            router.select(language: selectedLanguage)
-            router.closeController()
+            router?.select(language: selectedLanguage)
+            router?.closeController()
         }
     }
     
     func closeButtonTouched() {
-        router.closeController()
+        router?.closeController()
     }
 }

@@ -8,9 +8,9 @@
 
 import Foundation
 
-class TranslationInteractor: TranslationInteractorProtocol {
+final class TranslationInteractor: TranslationInteractorProtocol {
     
-    weak var presenter: TranslationPresenterProtocol!
+    weak var presenter: TranslationPresenterProtocol?
     
     let networkService: NetworkServiceProtocol
     let storageService: StorageServiceProtocol
@@ -20,11 +20,14 @@ class TranslationInteractor: TranslationInteractorProtocol {
             translate()
         }
     }
-    var fromLanguage: Language = Language.en
-    var toLanguage: Language = Language.ru
+    var fromLanguage: Language = .en
+    var toLanguage: Language = .ru
     var translationResult: String?
     
-    init(presenter: TranslationPresenterProtocol, networkService: NetworkServiceProtocol, storageService: StorageServiceProtocol) {
+    init(presenter: TranslationPresenterProtocol,
+         networkService: NetworkServiceProtocol,
+         storageService: StorageServiceProtocol) {
+        
         self.presenter = presenter
         self.networkService = networkService
         self.storageService = storageService
@@ -46,44 +49,42 @@ class TranslationInteractor: TranslationInteractorProtocol {
     }
     
     func translate() {
-        guard let expression = expression else {
-            return
-        }
+        guard let expression = expression else { return }
         
         let request = TranslationRequest(expression: expression, from: fromLanguage, to: toLanguage)
         networkService.translate(request: request, completion: { [weak self] (result, error) in
+            guard let self = self,
+                let presenter = self.presenter else { return }
+            
             if let error = error {
-                self?.presenter.showAlertView(with: error.localizedDescription)
+                self.presenter?.showAlertView(with: error.localizedDescription)
                 return
             }
             
-            if let translationResult = result,
-                let expression = self?.expression,
-                let from = self?.fromLanguage,
-                let to = self?.toLanguage {
-                
-                let item = TranslationItem(translationExpression: expression,
-                                           translationResult: translationResult,
-                                           fromLanguage: from,
-                                           toLanguage: to)
-                
-                self?.storageService.create(item: item, completion: { error in
-                    if let error = error {
-                        self?.presenter.showAlertView(with: error.localizedDescription)
-                        return
+            guard let translationResult = result,
+                let expression = self.expression else { return }
+            
+            let item = TranslationItem(translationExpression: expression,
+                                       translationResult: translationResult,
+                                       fromLanguage: self.fromLanguage,
+                                       toLanguage: self.toLanguage)
+            
+            self.storageService.create(item: item, completion: { error in
+                if let error = error {
+                    presenter.showAlertView(with: error.localizedDescription)
+                    return
+                }
+                DispatchQueue.main.async {
+                    if expression == request.expression &&
+                        self.fromLanguage == request.from &&
+                        self.toLanguage == request.to {
+                        
+                        self.translationResult = translationResult
+                        presenter.updateTranslationResult()
                     }
-                    DispatchQueue.main.async {
-                        if expression == request.expression &&
-                            from == request.from &&
-                            to == request.to {
-                            
-                            self?.translationResult = translationResult
-                            self?.presenter.updateTranslationResult()
-                        }
-                        self?.presenter.itemsListHasBeenUpdated()
-                    }
-                })
-            }
+                    presenter.itemsListHasBeenUpdated()
+                }
+            })
         })
     }
     
@@ -109,7 +110,7 @@ class TranslationInteractor: TranslationInteractorProtocol {
         fromLanguage = item.fromLanguage
         toLanguage = item.toLanguage
         
-        presenter.updateTranslationResult()
+        presenter?.updateTranslationResult()
     }
     
 }

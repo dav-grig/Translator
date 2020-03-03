@@ -8,8 +8,8 @@
 
 import Foundation
 
-class SelectInteractor: SelectInteractorProtocol {
-    weak var presenter: SelectPresenterProtocol!
+final class SelectInteractor: SelectInteractorProtocol {
+    weak var presenter: SelectPresenterProtocol?
     
     init(presenter: SelectPresenterProtocol) {
         self.presenter = presenter

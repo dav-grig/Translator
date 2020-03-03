@@ -12,7 +12,7 @@ protocol TranslationViewProtocol: class {
     func show(item: TranslationItem)
     func updateButtons()
     
-    var presenter: TranslationPresenterProtocol! { get }
+    var presenter: TranslationPresenterProtocol? { get }
 }
 
 protocol TranslationInteractorProtocol {
@@ -42,8 +42,8 @@ protocol TranslationPresenterProtocol: LanguageSetterProtocol {
     func swapButtonTouched()
     func setExpression(_ value: String)
     
-    var fromLanguageTitle: String { get }
-    var toLanguageTitle: String { get }
+    var fromLanguageTitle: String? { get }
+    var toLanguageTitle: String? { get }
     
     func fromButtonTouched()
     func toButtonTouched()

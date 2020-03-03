@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SelectConfigurator: ConfiguratorProtocol {
+final class SelectConfigurator: ConfiguratorProtocol {
     func configure(with viewController: SelectViewController) {
         
         let presenter = SelectPresenter(view: viewController)

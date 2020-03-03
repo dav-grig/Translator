@@ -9,16 +9,16 @@
 import Foundation
 import UIKit
 
-class TranslationRouter: TranslationRouterProtocol {
+final class TranslationRouter: TranslationRouterProtocol {
     
-    weak var viewController: TranslationViewController!
+    weak var viewController: TranslationViewController?
     
     init(viewController: TranslationViewController) {
         self.viewController = viewController
     }
     
     func updateHistoryList() {
-        if let navigationController = viewController.tabBarController?.viewControllers?[1] as? UINavigationController,
+        if let navigationController = viewController?.tabBarController?.viewControllers?[1] as? UINavigationController,
             let historyController = navigationController.topViewController as? HistoryViewProtocol {
 
             historyController.updateItems()
@@ -29,22 +29,24 @@ class TranslationRouter: TranslationRouterProtocol {
         DispatchQueue.main.async {
             let alertController = UIAlertController(title: "", message: text, preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: "OK", style: .default) { (action: UIAlertAction) in })
-            self.viewController.present(alertController, animated: true, completion: nil)
+            
+            self.viewController?.present(alertController, animated: true)
         }
     }
     
     func showSelectLanguageView(_ language: SelectedLanguage) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "selectLanguageViewController") as! UINavigationController
-        if let selectViewController = vc.topViewController as? SelectViewController {
-            
-            selectViewController.configurator = SelectConfigurator()
-            selectViewController.configurator.configure(with: selectViewController)
-            selectViewController.presenter.selectedLanguage = language
-            selectViewController.presenter.languageSetter = viewController.presenter
-            
-            viewController.present(vc, animated: true, completion: nil)
+        
+        guard let selectLanguageViewController = storyboard.instantiateViewController(withIdentifier: "selectLanguageViewController") as? UINavigationController,
+            let selectViewController = selectLanguageViewController.topViewController as? SelectViewController else {
+                return
         }
         
+        selectViewController.configurator = SelectConfigurator()
+        selectViewController.configurator.configure(with: selectViewController)
+        selectViewController.presenter?.selectedLanguage = language
+        selectViewController.presenter?.languageSetter = viewController?.presenter
+        
+        viewController?.present(selectLanguageViewController, animated: true)
     }
 }

@@ -8,19 +8,19 @@
 
 import Foundation
 
-class SelectRouter: SelectRouterProtocol {
+final class SelectRouter: SelectRouterProtocol {
     
-    weak var viewController: SelectViewController!
+    weak var viewController: SelectViewController?
     
     init(viewController: SelectViewController) {
         self.viewController = viewController
     }
     
     func select(language: SelectedLanguage) {
-        viewController.presenter.languageSetter?.set(language: language)
+        viewController?.presenter?.languageSetter?.set(language: language)
     }
     
     func closeController() {
-        viewController.dismiss(animated: true, completion: nil)
+        viewController?.dismiss(animated: true)
     }
 }

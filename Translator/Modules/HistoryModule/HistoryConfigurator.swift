@@ -8,7 +8,7 @@
 
 import Foundation
 
-class HistoryConfigurator: ConfiguratorProtocol {
+final class HistoryConfigurator: ConfiguratorProtocol {
     
     func configure(with viewController: HistoryViewController) {
         

@@ -8,13 +8,16 @@
 
 import Foundation
 
-class HistoryPresenter: HistoryPresenterProtocol {
+final class HistoryPresenter: HistoryPresenterProtocol {
     
-    weak var view: HistoryViewProtocol!
-    var interactor: HistoryInteractorProtocol!
-    var router: HistoryRouterProtocol!
+    weak var view: HistoryViewProtocol?
+    var interactor: HistoryInteractorProtocol?
+    var router: HistoryRouterProtocol?
     
     func items(isFiltered: Bool) -> [TranslationItem] {
+        guard let interactor = interactor else {
+            return [TranslationItem]()
+        }
         return interactor.items(isFiltered: isFiltered).reversed()
     }
     
@@ -23,29 +26,29 @@ class HistoryPresenter: HistoryPresenterProtocol {
     }
     
     func configureView() {
-        interactor.fetchAllItems()
+        interactor?.fetchAllItems()
     }
     
     func updateItems() {
-        view.updateItems()
+        view?.updateItems()
     }
     
     func didSelect(item: TranslationItem) {
-        router.show(item: item)
+        router?.show(item: item)
     }
     
     func clearButtonTouched() {
-        interactor.clearList { [weak self] in
-            self?.view.updateItems()
+        interactor?.clearList { [weak self] in
+            self?.view?.updateItems()
         }
     }
     
     func filterFor(searchText: String) {
-        interactor.filterFor(searchText: searchText)
+        interactor?.filterFor(searchText: searchText)
     }
     
     func showAlertView(with text: String) {
-        router.showAlertView(with: text)
+        router?.showAlertView(with: text)
     }
     
 }

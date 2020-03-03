@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HistoryTableViewCell: UITableViewCell {
+final class HistoryTableViewCell: UITableViewCell {
     
     @IBOutlet weak var expression: UILabel!
     @IBOutlet weak var result: UILabel!
@@ -23,9 +23,7 @@ class HistoryTableViewCell: UITableViewCell {
     }
     
     private func bindItem() {
-        guard let item = item else {
-            return
-        }
+        guard let item = item else { return }
         
         expression.text = item.translationExpression
         result.text = item.translationResult

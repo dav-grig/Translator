@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TranslationViewController: UIViewController, TranslationViewProtocol, UITextFieldDelegate {
+final class TranslationViewController: UIViewController, TranslationViewProtocol, UITextFieldDelegate {
     
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var inputTextField: UITextField!
@@ -20,7 +20,7 @@ class TranslationViewController: UIViewController, TranslationViewProtocol, UITe
     
     typealias ConfiguratorProtocol = TranslationConfigurator
 
-    var presenter: TranslationPresenterProtocol!
+    var presenter: TranslationPresenterProtocol?
     var configurator: ConfiguratorProtocol = TranslationConfigurator()
     
     override func viewDidLoad() {
@@ -32,8 +32,8 @@ class TranslationViewController: UIViewController, TranslationViewProtocol, UITe
     }
     
     func updateButtons() {
-        fromButton.setTitle(presenter.fromLanguageTitle, for: .normal)
-        toButton.setTitle(presenter.toLanguageTitle, for: .normal)
+        fromButton.setTitle(presenter?.fromLanguageTitle, for: .normal)
+        toButton.setTitle(presenter?.toLanguageTitle, for: .normal)
     }
     
     func show(item: TranslationItem) {
@@ -44,15 +44,15 @@ class TranslationViewController: UIViewController, TranslationViewProtocol, UITe
     }
     
     @IBAction func fromButtonAction(_ sender: Any) {
-        presenter.fromButtonTouched()
+        presenter?.fromButtonTouched()
     }
     
     @IBAction func swapButtonAction(_ sender: Any) {
-        presenter.swapButtonTouched()
+        presenter?.swapButtonTouched()
     }
     
     @IBAction func toButtonAction(_ sender: Any) {
-        presenter.toButtonTouched()
+        presenter?.toButtonTouched()
     }
     
     // MARK: - UITextFieldDelegate
@@ -63,7 +63,7 @@ class TranslationViewController: UIViewController, TranslationViewProtocol, UITe
         }
         textField.resignFirstResponder()
         
-        presenter.setExpression(text)
+        presenter?.setExpression(text)
         
         return false
     }
